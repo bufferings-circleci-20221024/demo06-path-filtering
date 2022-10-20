@@ -1,0 +1,62 @@
+version: 2.1
+
+executors:
+  base:
+    docker:
+      - image: cimg/base:stable
+
+parameters:
+  build-subdir1:
+    type: boolean
+    default: false
+  build-subdir2:
+    type: boolean
+    default: false
+  build-subdir3:
+    type: boolean
+    default: false
+  build-all:
+    type: boolean
+    default: false
+
+jobs:
+  job-subdir1:
+      executor: base
+      steps:
+        - run: 
+            command: echo "Hello subdir1"
+  job-subdir2: 
+      executor: base
+      steps:
+        - run: 
+            command: echo "Hello subdir2"
+  job-subdir3: 
+      executor: base
+      steps:
+        - run: 
+            command: echo "Hello subdir3"
+
+workflows:
+  build-subdir1:
+    when: 
+      or: 
+        - << pipeline.parameters.build-all >> 
+        - << pipeline.parameters.build-subdir1 >>
+    jobs:
+      - job-subdir1
+      
+  build-2:
+    when: 
+      or: 
+        - << pipeline.parameters.build-all >> 
+        - << pipeline.parameters.build-subdir2 >>
+    jobs:
+      - job-subdir2
+      
+  build-3:
+    when: 
+      or: 
+        - << pipeline.parameters.build-all >> 
+        - << pipeline.parameters.build-subdir3 >>
+    jobs:
+      - job-subdir3

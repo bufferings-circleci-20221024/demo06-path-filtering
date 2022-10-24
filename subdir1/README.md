@@ -1,2 +1,1 @@
 subdir1
-test
